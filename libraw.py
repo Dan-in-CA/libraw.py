@@ -927,23 +927,30 @@ class LibRaw:
         setattr(self, name, handler)  # cache value
         return handler
         
-if __name__ == "__main__":    
+if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("usage {} <rawfile>".format(sys.argv[0]))
         sys.exit(1)
     
+#   Instantiante LibRaw
     proc = LibRaw()
+    
     # Load the RAW file 
     pname = os.path.dirname(sys.argv[1])
     f = os.path.basename(sys.argv[1])
     fname = f.rsplit('.', 1)[0]
-
     proc.open_file(sys.argv[1])   
     print("file opened") 
     
     # Develop the RAW file
     print("unpacking")
     proc.unpack()
+    
+#     To access the raw data as a numpy array:
+#     
+#     proc.raw2image
+#     mosaic = proc.imgdata.image
+    
     
     print("processing")    
     proc.dcraw_process()
