@@ -11,7 +11,6 @@ based on: https://gist.github.com/campaul/ee30b2dbc2c11a699bde
 @copyright: LGPLv2 (same as libraw) <http://opensource.org/licenses/LGPL-2.1>
 
 @change: Modified for use on Raspberry Pi by Dan Kimberling.
-@requires: LibRaw-forPi
 @see: https://github.com/Dan-in-CA/LibRaw-forPi
 """
 
@@ -22,7 +21,7 @@ import os
 import sys
 
 so_file = "libraw.so.20.0.0"
-
+ 
 def find(name):
     """
     locate the *.so (shared object) file to bind to. 
@@ -33,12 +32,14 @@ def find(name):
                 return os.path.join(root, name)
     except Exception as e:
         print("LibRaw file not found " + e )
-
-so_path = find(so_file)
-print("Using {}".format(so_path))
-
-_hdl = cdll.LoadLibrary(so_path)
-
+ 
+try:
+    _hdl = cdll.LoadLibrary("/usr/local/lib/libraw.so.20.0.0")
+except OSError:
+    so_path = find(so_file)
+    _hdl = cdll.LoadLibrary(so_path)
+    print("Using {}".format(so_path))
+    
 # enum_LibRaw_thumbnail_formats = c_int
 time_t = c_long
 
@@ -945,5 +946,5 @@ if __name__ == "__main__":
     proc.unpack()
     
     print("processing")    
-    proc.dcraw_process() #  added
+    proc.dcraw_process()
     proc.dcraw_ppm_tiff_writer(pname + "/" + fname + ".ppm")

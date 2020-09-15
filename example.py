@@ -5,6 +5,7 @@ import numpy as np         # for processing
 
 proc = libraw.LibRaw()     # create RAW processor
 proc.open_file("file.dng") # open file
+proc.open_file("/home/pi/Pictures/checker-1.jpg")
 proc.unpack()              # extract mosaic from file
 mosaic = proc.imgdata.rawdata.raw_image
 
